@@ -1,0 +1,167 @@
+INDEX.HTML
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Interactive Form</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Register</h1>
+    <form id="userForm">
+      <label for="username">Username:</label>
+      <input type="text" id="username" required />
+      <small id="usernameMsg"></small>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" required />
+      <small id="emailMsg"></small>
+
+      <button type="submit">Submit</button>
+    </form>
+
+    <hr>
+
+    <div class="interactive">
+      <button id="colorBtn">Click me to change color 🎨</button>
+      <p id="hoverText">Hover over me 🖱️</p>
+      <input id="keyInput" placeholder="Type something (keypress detected)" />
+
+      <button id="secretBtn">Double-click me 👀</button>
+      <p id="secretMessage" style="display: none;">🎉 You found the secret message!</p>
+    </div>
+
+    <hr>
+
+    <div class="tabs">
+      <button class="tab-btn" data-tab="1">Tab 1</button>
+      <button class="tab-btn" data-tab="2">Tab 2</button>
+      <div class="tab-content" id="tab1">📘 Welcome to Tab 1 content</div>
+      <div class="tab-content" id="tab2" style="display: none;">📗 Welcome to Tab 2 content</div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+STYLE.CSS
+body {
+  font-family: Arial, sans-serif;
+  background: #f9f9f9;
+  margin: 0;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 400px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+form, .interactive, .tabs {
+  margin-top: 1.5rem;
+}
+
+input, button {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+small {
+  color: red;
+  font-size: 0.8rem;
+}
+
+#hoverText {
+  padding: 10px;
+  border: 1px dashed #aaa;
+  margin-bottom: 1rem;
+}
+
+.tab-btn {
+  width: 49%;
+  margin-bottom: 0.5rem;
+}
+
+.tab-content {
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 5px;
+  background: #f1f1f1;
+}
+
+SCRIPT.JS
+// Form Validation
+const form = document.getElementById("userForm");
+const username = document.getElementById("username");
+const email = document.getElementById("email");
+
+form.addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  let valid = true;
+
+  if (username.value.trim() === "") {
+    document.getElementById("usernameMsg").textContent = "Username is required.";
+    valid = false;
+  } else {
+    document.getElementById("usernameMsg").textContent = "";
+  }
+
+  const emailPattern = /^[^@]+@[^@]+\.[a-z]{2,}$/i;
+  if (!emailPattern.test(email.value.trim())) {
+    document.getElementById("emailMsg").textContent = "Enter a valid email.";
+    valid = false;
+  } else {
+    document.getElementById("emailMsg").textContent = "";
+  }
+
+  if (valid) {
+    alert("Form submitted!");
+    form.reset();
+  }
+});
+
+// Button click event
+document.getElementById("colorBtn").addEventListener("click", () => {
+  const btn = document.getElementById("colorBtn");
+  btn.style.backgroundColor = btn.style.backgroundColor === "orange" ? "#3498db" : "orange";
+});
+
+// Hover effect
+document.getElementById("hoverText").addEventListener("mouseenter", () => {
+  document.getElementById("hoverText").style.backgroundColor = "#dff0d8";
+});
+document.getElementById("hoverText").addEventListener("mouseleave", () => {
+  document.getElementById("hoverText").style.backgroundColor = "transparent";
+});
+
+// Keypress detection
+document.getElementById("keyInput").addEventListener("keypress", (e) => {
+  console.log(`You typed: ${e.key}`);
+});
+
+// Double click event
+document.getElementById("secretBtn").addEventListener("dblclick", () => {
+  document.getElementById("secretMessage").style.display = "block";
+});
+
+// Tab functionality
+const tabs = document.querySelectorAll(".tab-btn");
+tabs.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".tab-content").forEach(tc => tc.style.display = "none");
+    document.getElementById("tab" + btn.dataset.tab).style.display = "block";
+  });
+});
